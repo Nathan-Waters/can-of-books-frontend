@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import BookModal from './BookModal';
 import {
   BrowserRouter as Router,
   Switch,
@@ -16,7 +17,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      showModal: false,
+      newBook: {}
     }
   }
 
@@ -33,6 +36,25 @@ class App extends React.Component {
     })
   }
 
+  openModal = () => {
+    this.setState({
+      showModal:true
+    })
+  }
+
+  hideModal = () => {
+    this.setState({
+      showModal:false
+    })
+  }
+
+  bookHandler = (createdBook) =>{
+    this.setState({
+      newBook: createdBook
+    })
+    console.log(createdBook);
+  }
+
   render() {
     return (
       <>
@@ -41,7 +63,11 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/">
               {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
-            <BestBooks/>
+            <BestBooks
+            showModal={this.state.showModal}
+            openModal={this.openModal}
+            newBook={this.state.newBook}
+            />
 
 
             </Route>
@@ -57,8 +83,13 @@ class App extends React.Component {
             </Route>
           </Switch>
           <Footer />
+    
         </Router>
-        
+        <BookModal hideModal={this.hideModal} 
+        showModal={this.state.showModal}
+        user={this.state.user}
+        bookHandler={this.bookHandler}
+        />
       </>
     )
   }

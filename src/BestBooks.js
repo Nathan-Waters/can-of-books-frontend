@@ -1,12 +1,15 @@
 import axios from 'axios';
 import React from 'react';
-import { Carousel } from 'react-bootstrap';
+import { Carousel, Button } from 'react-bootstrap';
+
+
 
 class BestBooks extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      books: null
+      books: null,
+      newBook: {}
     }
   }
 
@@ -24,10 +27,46 @@ class BestBooks extends React.Component {
     }
   }
 
+
   componentDidMount() {
     this.getBooks();
-    console.log(this.state.books)
   };
+
+
+ 
+
+
+  postBooks = async () => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/books`;
+      let createdBook = await axios.post(url, this.props.newBook);
+      console.log(createdBook.data);
+      this.setState({
+        books: [...this.state.books, createdBook.data]
+      })
+    } catch (error) {
+      console.log('we have an error: ', error.response.data);
+    }
+  }
+
+  
+
+  
+
+  // deleteBooks = async (id) => {
+  //   try {
+  //     let url = `${process.env.REACT_APP_SERVER}/books/${id}`
+  //     let updatedBooks = await axios.delete(url);
+  //     this.state.books.filter(book => book._id !== id);
+  //     this.setState({
+  //       books: updatedBooks
+  //     })
+  //   } catch (error) {
+  //     console.log('we have an error: ', error.response.data);
+  //   }
+  // }
+
+ 
 
   render() {
     /* TODO: render user's books in a Carousel */
@@ -46,6 +85,7 @@ class BestBooks extends React.Component {
         <Carousel>
           {bookItems}
         </Carousel>
+        <Button onClick={this.props.openModal}>Add new Book</Button>
       </>
     )
   }
