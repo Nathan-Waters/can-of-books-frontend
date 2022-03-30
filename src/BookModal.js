@@ -14,6 +14,7 @@ export default class BookModal extends Component {
       email: this.props.user.email,
 
     }
+    this.props.hideModal();
     console.log(newBook);
     this.props.bookHandler(newBook);
   }
