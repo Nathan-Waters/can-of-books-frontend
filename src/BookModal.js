@@ -11,12 +11,13 @@ export default class BookModal extends Component {
       title: e.target.title.value,
       description: e.target.description.value,
       status: e.target.status.checked,
-      email: this.props.user.email,
+      email: this.props.user.email
 
     }
     this.props.hideModal();
     console.log(newBook);
-    this.props.bookHandler(newBook);
+    this.props.postBooks(newBook);
+    // this.props.bookHandler(newBook);
   }
 
   render() {

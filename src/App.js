@@ -9,8 +9,10 @@ import {
   Route
 } from "react-router-dom";
 import BestBooks from './BestBooks';
+// import DeleteModal from './DeleteModal';
 import Profile from './Profile';
 import LoginForm from './LoginForm';
+import axios from 'axios';
 
 class App extends React.Component {
 
@@ -19,7 +21,8 @@ class App extends React.Component {
     this.state = {
       user: null,
       showModal: false,
-      newBook: {}
+      // showDeleteModal: false
+      // newBook: {}
     }
   }
 
@@ -42,20 +45,43 @@ class App extends React.Component {
     })
   }
 
+  // openDeleteModal = () => {
+  //   this.setState({
+  //     showDeleteModal:true
+  //   })
+  // }
+
+
   hideModal = () => {
     this.setState({
-      showModal:false
+      showModal:false,
+      // showDeleteModal: false
     })
   }
 
-  bookHandler = (createdBook) =>{
-    this.setState({
-      newBook: createdBook
-    })
-    console.log(createdBook);
+  // bookHandler = (createdBook) =>{
+  //   this.setState({
+  //     newBook: createdBook
+  //   })
+  //   console.log(createdBook);
+  // }
+
+  postBooks = async (newBook) => {
+    try {
+      let url = `${process.env.REACT_APP_SERVER}/books`;
+      let createdBook = await axios.post(url, newBook);
+      console.log(createdBook);
+      this.setState({
+        books: [...this.state.books, createdBook.data]
+      })
+    } catch (error) {
+      console.log('we have an error: ', error);
+    }
   }
+
 
   render() {
+    console.log(this.state)
     return (
       <>
         <Router>
@@ -64,9 +90,13 @@ class App extends React.Component {
             <Route exact path="/">
               {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
             <BestBooks
-            showModal={this.state.showModal}
+            // postBooks={this.postBooks} 
+            // showModal={this.state.showModal}
             openModal={this.openModal}
-            newBook={this.state.newBook}
+            postBooks={this.postBooks}
+            // openDeleteModal={this.openDeleteModal}
+            // showDeleteModal={this.state.showDeleteModal}
+            // newBook={this.state.newBook}
             />
 
 
@@ -85,11 +115,17 @@ class App extends React.Component {
           <Footer />
     
         </Router>
-        <BookModal hideModal={this.hideModal} 
+        <BookModal
+        postBooks={this.postBooks} 
+        hideModal={this.hideModal} 
         showModal={this.state.showModal}
         user={this.state.user}
         bookHandler={this.bookHandler}
         />
+        {/* <DeleteModal
+        showDeleteModal={this.state.showDeleteModal} 
+        hideModal={this.hideModal} 
+        /> */}
       </>
     )
   }
