@@ -9,7 +9,7 @@ import {
   Route
 } from "react-router-dom";
 import BestBooks from './BestBooks';
-// import DeleteModal from './DeleteModal';
+// import EditModal from './EditModal';
 import Profile from './Profile';
 import LoginForm from './LoginForm';
 import axios from 'axios';
@@ -21,7 +21,7 @@ class App extends React.Component {
     this.state = {
       user: null,
       showModal: false,
-      // showDeleteModal: false
+      showEditModal: false
       // newBook: {}
     }
   }
@@ -45,17 +45,17 @@ class App extends React.Component {
     })
   }
 
-  // openDeleteModal = () => {
-  //   this.setState({
-  //     showDeleteModal:true
-  //   })
-  // }
+  openEditModal = () => {
+    this.setState({
+      showEditModal:true
+    })
+  }
 
 
   hideModal = () => {
     this.setState({
       showModal:false,
-      // showDeleteModal: false
+      showDeleteModal: false
     })
   }
 
@@ -94,9 +94,11 @@ class App extends React.Component {
             // showModal={this.state.showModal}
             openModal={this.openModal}
             postBooks={this.postBooks}
-            // openDeleteModal={this.openDeleteModal}
+            openEditModal={this.openEditModal}
             // showDeleteModal={this.state.showDeleteModal}
             // newBook={this.state.newBook}
+            showEditModal={this.state.showEditModal}
+            hideModal={this.hideModal}  
             />
 
 
@@ -122,8 +124,8 @@ class App extends React.Component {
         user={this.state.user}
         bookHandler={this.bookHandler}
         />
-        {/* <DeleteModal
-        showDeleteModal={this.state.showDeleteModal} 
+        {/* <EditModal
+        showEditModal={this.state.showEditModal} 
         hideModal={this.hideModal} 
         /> */}
       </>

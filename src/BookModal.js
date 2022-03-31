@@ -38,7 +38,7 @@ export default class BookModal extends Component {
                 <Form.Control type="text" placeholder="Brief Description of Book..." />
               </Form.Group>
               <Form.Group className="mb-3" controlId="status">
-                <Form.Check type="checkbox" label="Status" />
+                <Form.Check type="checkbox" label="Have you read this book?" />
               </Form.Group>
             <Button variant="primary" type="submit ">Submit</Button>
             </Form>

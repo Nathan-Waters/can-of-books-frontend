@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { Carousel, Button } from 'react-bootstrap';
+import EditModal from './EditModal';
 // import DeleteModal from './DeleteModal';
 
 
@@ -80,6 +81,28 @@ class BestBooks extends React.Component {
   //   }
   // }
 
+
+  updateBook = async (bookToUpdate) => {
+    try{
+      let url = `${process.env.REACT_APP_SERVER}/books/${bookToUpdate._id}`
+      let updatedBooks = await axios.map(url,bookToUpdate);
+      let updatedBooksData = this.state.books.map(existingBook =>{
+        return existingBook._id === bookToUpdate._id ? updatedBooks.data : existingBook;
+      });
+      this.setState({
+        books: updatedBooksData
+      });
+    }catch(error){
+      console.log('we have an error: ', error.message)
+    }
+  }
+
+  sendMeTheBooks = (book) => {
+    this.props.openEditModal();
+    let books = book;
+    console.log(books);
+  }
+
  
 
   render() {
@@ -90,6 +113,8 @@ class BestBooks extends React.Component {
           <h3>{book.title}</h3>
           <p>{book.description}</p>
           <Button onClick={()=>this.deleteBooks(book._id)}>DELETE MEEEE!</Button>
+
+          <Button onClick={()=>this.sendMeTheBooks(book)}>EDIT MEEEE!</Button>
         </Carousel.Item>
       )
 
@@ -102,11 +127,12 @@ class BestBooks extends React.Component {
         </Carousel>
         
         <Button onClick={this.props.openModal}>Add new Book</Button>
-        {/* <Button onClick={this.props.openDeleteModal}>Delete Book</Button>
-        <Button onClick={this.props.openUpdateModel}>Update Book</Button>
-        <DeleteModal
-          books={this.state.books}
-        /> */}
+        <EditModal
+          showEditModal={this.props.showEditModal}
+          hideModal={this.props.hideModal}
+          updateBook={this.updateBook} 
+          // books={this.state.books} 
+        />
       </>
     )
   }
