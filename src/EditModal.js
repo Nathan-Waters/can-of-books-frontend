@@ -4,8 +4,6 @@ import Form from 'react-bootstrap/Form';
 import { Button } from 'react-bootstrap'
 
 class EditModal extends React.Component {
-  
-  
   handleUpdate = (e) => {
     e.preventDefault();
     let bookToUpdate = {
@@ -15,24 +13,23 @@ class EditModal extends React.Component {
       _id: this.props.books._id,
       __v: this.props.books.__v,
     }
+    
+    this.props.updateBook(bookToUpdate); 
     this.props.hideModal();
-    console.log(bookToUpdate);
-    // this.props.updateBook(bookToUpdate); 
   } 
   
     render() {
-
+      
     return (
       <>
-      {console.log(this.props.books)}
-      {console.log(this.props.book)}
+        
         <Modal show={this.props.showEditModal} onHide={this.props.hideModal}>
           <Modal.Body>
             <Form onSubmit={this.handleUpdate}>
 
               <Form.Group className="mb-3" controlId="title">
                 <Form.Label>Username</Form.Label>
-                <Form.Control type="type" placeholder={this.props.books}/>
+                <Form.Control type="type" placeholder=""/>
               </Form.Group>
 
               <Form.Group className="mb-3" controlId="description">
@@ -53,8 +50,11 @@ class EditModal extends React.Component {
               <Button variant="primary" type="submit" onClick={this.props.hideModal}>
                 Submit
               </Button>
-
+        
             </Form>
+            <Modal.Footer>
+            <Button variant="secondary" onClick={this.props.hideModal}>Close</Button>
+          </Modal.Footer>
           </Modal.Body>
         </Modal>
       </>

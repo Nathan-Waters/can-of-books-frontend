@@ -12,12 +12,9 @@ export default class BookModal extends Component {
       description: e.target.description.value,
       status: e.target.status.checked,
       email: this.props.user.email
-
     }
-    this.props.hideModal();
     console.log(newBook);
     this.props.postBooks(newBook);
-    // this.props.bookHandler(newBook);
   }
 
   render() {
@@ -44,8 +41,8 @@ export default class BookModal extends Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-          </Modal.Footer>
             <Button variant="secondary" onClick={this.props.hideModal}>Close</Button>
+          </Modal.Footer>
         </Modal>
       </>
     )

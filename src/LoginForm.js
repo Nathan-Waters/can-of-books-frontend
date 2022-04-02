@@ -4,25 +4,26 @@ import Button from 'react-bootstrap/Button';
 
 class LoginForm extends Component {
 
-  submitHandler = (e) => {
-    e.preventDefault();
-    let newUser = {
-      username: e.target.username.value,
-      email: e.target.email.value
-    }
-    console.log(newUser);
-    this.setState({
-      user : newUser
-    })
-    this.props.onLogin(newUser);
-    console.log(this.props.user);
-  }
+  // submitHandler = (e) => {
+  //   e.preventDefault();
+  //   let newUser = {
+  //     username: e.target.username.value,
+  //     email: e.target.email.value
+  //   }
+  //   console.log(newUser);
+  //   this.setState({
+  //     user : newUser
+  //   })
+  //   this.props.onLogin(newUser);
+  //   console.log(this.props.user);
+  // }
 
   render() {
+    // console.log(this.state.user);
     /* TODO: create a simple login form that collects username and and email, and lets parent component know when form has been submitted */
     return (
       <>
-      <Form onSubmit={this.submitHandler}>
+      <Form onSubmit={this.props.submitHandler}>
         <Form.Group className="mb-3" controlId="username">
           <Form.Label>Username</Form.Label>
           <Form.Control type="type" placeholder="Pick something human like..." />

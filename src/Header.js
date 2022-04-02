@@ -17,11 +17,6 @@ class Header extends React.Component {
         
 
         {/* TODO: if the user is logged in, render the `LogoutButton` */}
-        {this.props.user ? 
-        <NavItem><LogoutButton onLogout={this.props.onLogout}></LogoutButton></NavItem> :
-        <NavItem><Link to="/LoginForm"><LoginButton>Login</LoginButton></Link></NavItem>
-      }
-
       </Navbar>
     )
   }

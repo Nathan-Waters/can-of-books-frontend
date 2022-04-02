@@ -130,8 +130,7 @@ class BestBooks extends React.Component {
         <EditModal
           showEditModal={this.props.showEditModal}
           hideModal={this.props.hideModal}
-          updateBook={this.updateBook} 
-          // books={this.state.books} 
+          updateBook={this.updateBook}
         />
       </>
     )

@@ -2,17 +2,20 @@ import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import BookModal from './BookModal';
+// import BookModal from './BookModal';
 import {
   BrowserRouter as Router,
   Switch,
   Route
 } from "react-router-dom";
 import BestBooks from './BestBooks';
-// import EditModal from './EditModal';
-import Profile from './Profile';
+import BookModal from './BookModal';
+import ProfileAuth0 from './Profile';
 import LoginForm from './LoginForm';
 import axios from 'axios';
+import { withAuth0 } from '@auth0/auth0-react'
+import LoginButtonauth0 from './authLoginButton';
+import LogoutButtonauth0 from './authLogoutButton';
 
 class App extends React.Component {
 
@@ -41,23 +44,38 @@ class App extends React.Component {
 
   openModal = () => {
     this.setState({
-      showModal:true
+      showModal: true
     })
   }
 
   openEditModal = () => {
     this.setState({
-      showEditModal:true
+      showEditModal: true
     })
   }
 
 
   hideModal = () => {
     this.setState({
-      showModal:false,
+      showModal: false,
       showDeleteModal: false
     })
   }
+
+  submitHandler = (e) => {
+    e.preventDefault();
+    let newUser = {
+      username: e.target.username.value,
+      email: e.target.email.value
+    }
+    console.log(newUser);
+    this.setState({
+      user: newUser
+    })
+    this.loginHandler(newUser);
+    console.log(this.props.user);
+  }
+
 
   // bookHandler = (createdBook) =>{
   //   this.setState({
@@ -84,53 +102,54 @@ class App extends React.Component {
     console.log(this.state)
     return (
       <>
-        <Router>
-          <Header user={this.state.user} onLogout={this.logoutHandler} onLogin={this.loginHandler} />
-          <Switch>
-            <Route exact path="/">
-              {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
-            <BestBooks
-            // postBooks={this.postBooks} 
-            // showModal={this.state.showModal}
-            openModal={this.openModal}
-            postBooks={this.postBooks}
-            openEditModal={this.openEditModal}
-            // showDeleteModal={this.state.showDeleteModal}
-            // newBook={this.state.newBook}
-            showEditModal={this.state.showEditModal}
-            hideModal={this.hideModal}  
-            />
+        <h1>Auth0</h1>
+        {
+          this.props.auth0.isAuthenticated
+            ? <LogoutButtonauth0 />
+            : <LoginButtonauth0 />
+        }
+        {
+          this.props.auth0.isAuthenticated
+            ? <Router>
+              <Header user={this.state.user} onLogout={this.logoutHandler} onLogin={this.loginHandler} />
+              <Switch>
+                <Route exact path="/">
+                  {/* TODO: if the user is logged in, render the `BestBooks` component, if they are not, render the `Login` component */}
+                  <BestBooks
+                    openModal={this.openModal}
+                    postBooks={this.postBooks}
+                    openEditModal={this.openEditModal}
+                    showEditModal={this.state.showEditModal}
+                    hideModal={this.hideModal}
+                  />
+                 <BookModal
+                    postBooks={this.postBooks}
+                    hideModal={this.hideModal}
+                    showModal={this.state.showModal}
+                    user={this.state.user}
+                    bookHandler={this.bookHandler}
+                  />
+                </Route>
+                {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
+                <Route exact path="/Profile">
+                  <ProfileAuth0
+                  />
+                </Route>
 
+                <Route exact path="/LoginForm">
+                  <LoginForm submitHandler={this.submitHandler} onLogin={this.loginHandler}></LoginForm>
+                </Route>
+              </Switch>
+              <Footer />
 
-            </Route>
-            {/* TODO: add a route with a path of '/profile' that renders a `Profile` component */}
-            <Route exact path="/Profile">
-            <Profile 
-              user={this.state.user}
-            />
-            </Route>
+              </Router>
 
-            <Route exact path="/LoginForm">
-              <LoginForm onLogin={this.loginHandler}></LoginForm>
-            </Route>
-          </Switch>
-          <Footer />
-    
-        </Router>
-        <BookModal
-        postBooks={this.postBooks} 
-        hideModal={this.hideModal} 
-        showModal={this.state.showModal}
-        user={this.state.user}
-        bookHandler={this.bookHandler}
-        />
-        {/* <EditModal
-        showEditModal={this.state.showEditModal} 
-        hideModal={this.hideModal} 
-        /> */}
+            : <h2>Please Log In</h2>
+        }
       </>
     )
   }
 }
 
-export default App;
+
+export default withAuth0(App);
